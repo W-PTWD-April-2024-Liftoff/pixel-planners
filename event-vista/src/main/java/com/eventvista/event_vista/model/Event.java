@@ -3,9 +3,12 @@ package com.eventvista.event_vista.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Event {
@@ -13,34 +16,39 @@ public class Event {
     @GeneratedValue
     private int id;
 
-    @NotBlank(message = "Field must have valid event name entered")
-    @Size(min = 3, max = 100, message = "Field must be between 3 and 100 characters")
+    @NotBlank(message = "Event name is required")
+    @Size(min = 3, max = 100, message = "Event name must be between 3 and 100 characters")
     private String name;
 
+    @NotNull(message = "Date is required")
     private String date;
+
+    @NotNull(message = "Time is required")
     private String time;
+
     private String notes;
 
     @ManyToOne
+    @NotNull(message = "Venue is required")
     private Venue venue;
 
     @ManyToMany
-    private Vendor vendor;
+    private Set<Vendor> vendors = new HashSet<>();
 
-    @ManyToMany
+    @ManyToOne
+    @NotNull(message = "Client is required")
     private Client client;
 
     public Event() {
     }
 
-    public Event(int id, String name, String date, String time, String notes, Venue venue, Vendor vendor, Client client) {
-        this.id = id;
+
+    public Event(String name, String date, String time, String notes, Venue venue, Vendor vendor, Client client) {
         this.name = name;
         this.date = date;
         this.time = time;
         this.notes = notes;
         this.venue = venue;
-        this.vendor = vendor;
         this.client = client;
     }
 
@@ -88,12 +96,12 @@ public class Event {
         this.venue = venue;
     }
 
-    public Vendor getVendor() {
-        return vendor;
+    public Set<Vendor> getVendors() {
+        return vendors;
     }
 
-    public void setVendor(Vendor vendor) {
-        this.vendor = vendor;
+    public void setVendors(Set<Vendor> vendors) {
+        this.vendors = vendors;
     }
 
     public Client getClient() {
