@@ -8,10 +8,10 @@ import jakarta.validation.constraints.Size;
 import java.util.Objects;
 
 @Entity
-public class Event {
-    @Id
-    @GeneratedValue
-    private int id;
+public class Event extends AbstractEntity{
+//    @Id
+//    @GeneratedValue
+//    private int id;
 
     @NotBlank(message = "Field must have valid event name entered")
     @Size(min = 3, max = 100, message = "Field must be between 3 and 100 characters")
@@ -34,7 +34,7 @@ public class Event {
     }
 
     public Event(int id, String name, String date, String time, String notes, Venue venue, Vendor vendor, Client client) {
-        this.id = id;
+        //this.id = id;
         this.name = name;
         this.date = date;
         this.time = time;
@@ -44,9 +44,9 @@ public class Event {
         this.client = client;
     }
 
-    public int getId() {
-        return id;
-    }
+//    //public int getId() {
+//        return id;
+//    }
 
     public String getName() {
         return name;
@@ -104,21 +104,21 @@ public class Event {
         this.client = client;
     }
 
-    @Override
-    public String toString() {
-        return name;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Event that = (Event) o;
-        return id == that.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
+//    @Override
+//    public String toString() {
+//        return name;
+//    }
+//
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Event that = (Event) o;
+//        return id == that.id;
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(id);
+//    }
 }
