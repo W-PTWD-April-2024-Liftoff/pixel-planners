@@ -1,10 +1,7 @@
 package com.eventvista.event_vista.model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -15,10 +12,6 @@ import java.util.Objects;
 
 @Entity
 public class Client extends AbstractEntity {
-
-//    @Id
-//    @GeneratedValue
-//    private int id;
 
     @NotBlank(message = "Client name is required")
     @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
@@ -33,8 +26,15 @@ public class Client extends AbstractEntity {
 
     private String notes;
 
-    @OneToMany(mappedBy = "client")
-    private List<Event> events = new ArrayList<>();
+//    @OneToMany(mappedBy = "client")
+//    private List<Event> events = new ArrayList<>();
+
+//    @OneToMany(mappedBy = "event")
+//    private List<Client> clients;
+
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    private Event event;
 
     public Client() {
     }
@@ -46,9 +46,6 @@ public class Client extends AbstractEntity {
         this.notes = notes;
     }
 
-//    public int getId() {
-//        return id;
-//    }
 
     public String getName() {
         return name;
@@ -82,29 +79,17 @@ public class Client extends AbstractEntity {
         this.notes = notes;
     }
 
-    public List<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(List<Event> events) {
-        this.events = events;
-    }
+//    public List<Event> getEvents() {
+//        return events;
+//    }
+//
+//    public void setEvents(List<Event> events) {
+//        this.events = events;
+//    }
 
     @Override
     public String toString() {
         return name;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Client that = (Client) o;
-//        return id == that.id;
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id);
-//    }
 }

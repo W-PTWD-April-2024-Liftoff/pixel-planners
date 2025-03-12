@@ -11,13 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+@RestController
+@RequestMapping("/api")
 @Controller
 public class AuthenticationController {
 
@@ -107,10 +106,10 @@ public class AuthenticationController {
         }
 
         // OTHERWISE, save new username and hashed password in database, start a new session, and redirect to home page
-        User newUser = new User(registrationFormDTO.getUsername(), registrationFormDTO.getPassword());
+        User newUser = new User(registrationFormDTO.getUsername(), registrationFormDTO.getEmail(), registrationFormDTO.getPassword());
         userRepository.save(newUser);
         setUserInSession(request.getSession(), newUser);
-        return "redirect:"; //NEED TO ADD REDIRECT PAGE AKA HOME PAGE
+        return "redirect:/welcome"; //NEED TO ADD REDIRECT PAGE AKA HOME PAGE
     }
 
     // Handlers for login form
@@ -150,7 +149,7 @@ public class AuthenticationController {
 
         // OTHERWISE, create a new session for the user and take them to the home page
         setUserInSession(request.getSession(), theUser);
-        return "redirect:"; //NEED TO ADD REDIRECT PAGE AKA HOME PAGE!!!!!
+        return "redirect:/welcome"; //NEED TO ADD REDIRECT PAGE AKA HOME PAGE!!!!!
     }
 
     // Handler for logout

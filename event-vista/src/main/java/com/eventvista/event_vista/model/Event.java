@@ -5,13 +5,11 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 public class Event extends AbstractEntity{
-//    @Id
-//    @GeneratedValue
-//    private int id;
 
     @NotBlank(message = "Field must have valid event name entered")
     @Size(min = 3, max = 100, message = "Field must be between 3 and 100 characters")
@@ -24,29 +22,30 @@ public class Event extends AbstractEntity{
     @ManyToOne
     private Venue venue;
 
+//    @ManyToMany
+//    private Vendor vendor;
     @ManyToMany
-    private Vendor vendor;
+    private List<Vendor> vendors;
 
-    @ManyToMany
-    private Client client;
+//    @ManyToMany
+//    private Client client;
+
+    @OneToMany(mappedBy = "event")
+    private List<Client> clients;
 
     public Event() {
     }
 
-    public Event(int id, String name, String date, String time, String notes, Venue venue, Vendor vendor, Client client) {
-        //this.id = id;
+    public Event(String name, String date, String time, String notes, Venue venue, List<Vendor> vendors) {
         this.name = name;
         this.date = date;
         this.time = time;
         this.notes = notes;
         this.venue = venue;
-        this.vendor = vendor;
-        this.client = client;
+        this.vendors = vendors;
+        //this.client = client;
     }
 
-//    //public int getId() {
-//        return id;
-//    }
 
     public String getName() {
         return name;
@@ -88,37 +87,41 @@ public class Event extends AbstractEntity{
         this.venue = venue;
     }
 
-    public Vendor getVendor() {
-        return vendor;
-    }
-
-    public void setVendor(Vendor vendor) {
-        this.vendor = vendor;
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
-//    @Override
-//    public String toString() {
-//        return name;
+//    public Vendor getVendor() {
+//        return vendor;
 //    }
 //
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Event that = (Event) o;
-//        return id == that.id;
+//    public void setVendor(Vendor vendor) {
+//        this.vendor = vendor;
+//    }
+
+    public List<Vendor> getVendors() {
+        return vendors;
+    }
+
+    public void setVendors(List<Vendor> vendors) {
+        this.vendors = vendors;
+    }
+
+    public List<Client> getClients() {
+        return clients;
+    }
+
+    public void setClients(List<Client> clients) {
+        this.clients = clients;
+    }
+
+//    public Client getClient() {
+//        return client;
 //    }
 //
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id);
+//    public void setClient(Client client) {
+//        this.client = client;
 //    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
 }

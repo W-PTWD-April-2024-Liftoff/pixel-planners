@@ -22,12 +22,12 @@ public class AuthenticationFilter implements HandlerInterceptor {
     AuthenticationController authenticationController;
 
     // Allow certain pages and static resources to be seen by the public (not logged in)
-    private static final List<String> whitelist = Arrays.asList("/login", "/register", "/logout", "/css");
+    private static final List<String> whitelist = Arrays.asList("/api", "api//welcome", "api/login", "api/register", "api/logout", "api/css", "api/images", "api/index");
 
     // Check all pages and static resources against blacklist
     private static boolean isWhitelisted(String path) {
         for (String pathRoot : whitelist) {
-            if (path.startsWith(pathRoot)) {
+            if (path.equals("/") || path.startsWith(pathRoot)) {
                 return true;
             }
         }
@@ -52,10 +52,20 @@ public class AuthenticationFilter implements HandlerInterceptor {
         if (user != null) {
             return true;
         }
+//
+//        // The user is NOT logged in
+//        response.sendRedirect("/login");
+//        return false;
 
-        // The user is NOT logged in
-        response.sendRedirect("/login");
-        return false;
+        if (request.getMethod().equals("OPTIONS")) {
+            // For preflight requests, respond with the necessary CORS headers
+            response.setStatus(HttpServletResponse.SC_OK);
+            return true;
+        } else {
+            // For other requests, respond with a CORS error
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return false;
+        }
     }
 
 }

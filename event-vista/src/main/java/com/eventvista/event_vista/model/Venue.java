@@ -17,9 +17,6 @@ import java.util.Objects;
 @Entity
 public class Venue extends AbstractEntity {
 
-//    @Id
-//    @GeneratedValue
-//    private int id;
 
     @NotBlank(message = "Venue name is required")
     @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
@@ -57,9 +54,6 @@ public class Venue extends AbstractEntity {
         this.notes = notes;
     }
 
-//    public int getId() {
-//        return id;
-//    }
 
     public String getName() {
         return name;
@@ -129,19 +123,6 @@ public class Venue extends AbstractEntity {
     public String toString() {
         return name;
     }
-
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Venue that = (Venue) o;
-//        return id == that.id;
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id);
-//    }
 
 
 }

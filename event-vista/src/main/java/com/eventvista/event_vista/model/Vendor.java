@@ -11,9 +11,7 @@ import java.util.Set;
 
 @Entity
 public class Vendor extends AbstractEntity {
-//    @Id
-//    @GeneratedValue
-//    private int id;
+
 
     @NotBlank(message = "Vendor name is required")
     @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
@@ -47,9 +45,6 @@ public class Vendor extends AbstractEntity {
         this.notes = notes;
     }
 
-//    public int getId() {
-//        return id;
-//    }
 
     public String getName() {
         return name;
@@ -111,19 +106,6 @@ public class Vendor extends AbstractEntity {
     public String toString() {
         return name;
     }
-
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Vendor that = (Vendor) o;
-//        return id == that.id;
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id);
-//    }
 
 
 }

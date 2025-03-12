@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main>
+    <h1>Welcome</h1>
+    <p>This portal will allow you to help manage your <a href='/events'>events</a>.</p>
+</main>
+<img th:src="@{/images/wedding.jpg}" width="100%" />
+</body>
+</html>
