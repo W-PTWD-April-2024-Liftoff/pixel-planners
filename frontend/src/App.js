@@ -7,7 +7,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Start page for our event planner app
+          Start page for our event planner app!!!!
         </p>
       </header>
     </div>

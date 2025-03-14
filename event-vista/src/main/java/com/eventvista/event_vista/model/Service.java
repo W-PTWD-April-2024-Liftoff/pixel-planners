@@ -13,9 +13,6 @@ import java.util.Set;
 
 @Entity
 public class Service extends AbstractEntity {
-//    @Id
-//    @GeneratedValue
-//    private int id;
 
     @NotBlank(message = "Service name is required")
     @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
@@ -30,10 +27,6 @@ public class Service extends AbstractEntity {
     public Service(String name) {
         this.name = name;
     }
-
-//    public int getId() {
-//        return id;
-//    }
 
     public String getName() {
         return name;
@@ -56,16 +49,4 @@ public class Service extends AbstractEntity {
         return name;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Service that = (Service) o;
-//        return id == that.id;
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id);
-//    }
 }
