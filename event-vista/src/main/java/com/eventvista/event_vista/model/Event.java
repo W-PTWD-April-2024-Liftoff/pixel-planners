@@ -42,12 +42,15 @@ public class Event extends AbstractEntity{
     @ManyToOne
     private Client client;
 
+    @ManyToOne
+    private Calendar calendar;
+
     // Constructor
 
     public Event() {
     }
 
-    public Event(String name, LocalDate date, LocalTime time, String notes, Venue venue, Set<Vendor> vendors, Client client) {
+    public Event(String name, LocalDate date, LocalTime time, String notes, Venue venue, Set<Vendor> vendors, Client client, Calendar calendar) {
         this.name = name;
         this.date = date;
         this.time = time;
@@ -55,6 +58,7 @@ public class Event extends AbstractEntity{
         this.venue = venue;
         this.vendors = vendors;
         this.client = client;
+        this.calendar = calendar;
     }
 
 
@@ -124,6 +128,10 @@ public class Event extends AbstractEntity{
     public void setClient(Client client) {
         this.client = client;
     }
+
+    public Calendar getCalendar() { return calendar; }
+
+    public void setCalendar(Calendar calendar) { this.calendar = calendar; }
 
     @Override
     public String toString() {
