@@ -37,6 +37,10 @@ public class Venue extends AbstractEntity {
     @Size(max = 500, message = "Field must be less than 500 characters")
     private String notes;
 
+    @ManyToOne
+    @JoinColumn
+    private User user;
+
 
     @ElementCollection
     private List<String> photoUrls = new ArrayList<>();
@@ -122,6 +126,14 @@ public class Venue extends AbstractEntity {
 
     public void setEvents(List<Event> events) {
         this.events = events;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
