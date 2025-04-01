@@ -6,6 +6,8 @@ import com.eventvista.event_vista.model.AuthProvider;
 import com.eventvista.event_vista.model.dto.LoginFormDTO;
 import com.eventvista.event_vista.model.dto.RegisterFormDTO;
 import com.eventvista.event_vista.model.dto.ResetPasswordDTO;
+import com.eventvista.event_vista.security.JwtTokenProvider;
+import com.eventvista.event_vista.service.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

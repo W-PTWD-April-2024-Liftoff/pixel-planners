@@ -1,5 +1,7 @@
 package com.eventvista.event_vista.config;
 
+import com.eventvista.event_vista.security.JwtAuthenticationFilter;
+import com.eventvista.event_vista.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
