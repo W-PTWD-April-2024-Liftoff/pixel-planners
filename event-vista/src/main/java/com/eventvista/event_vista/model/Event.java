@@ -18,6 +18,9 @@ public class Event extends AbstractEntity{
     @ManyToOne
     private User user;
 
+    @ManyToOne
+    private Calendar calendar;
+
     @NotBlank(message = "Field must have valid event name entered")
     @Size(min = 3, max = 100, message = "Field must be between 3 and 100 characters")
     private String name;
@@ -59,6 +62,14 @@ public class Event extends AbstractEntity{
 
 
     // Getters and setters
+
+    public Calendar getCalendar() {
+        return calendar;
+    }
+
+    public void setCalendar(Calendar calendar) {
+        this.calendar = calendar;
+    }
 
 
     public String getName() {
