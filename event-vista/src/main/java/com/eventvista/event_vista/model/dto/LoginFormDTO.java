@@ -6,7 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class LoginFormDTO {
-// removed user for testing, will bring back later
+
+    //removed user for testing , will bring back later
 //    @NotNull(message = "Username is required")
 //    @NotBlank(message = "Username is required")
 //    @Size(min = 3, max = 20, message = "Invalid username. Must be between 3 and 20 characters.")
