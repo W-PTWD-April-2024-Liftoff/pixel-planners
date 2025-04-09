@@ -27,5 +27,9 @@ public class UserServiceImpl implements UserService {
     public boolean existsByEmailAddress(String emailAddress) {
         return userRepository.existsByEmailAddress(emailAddress);
     }
+
+    public void updateUser(User user) {
+        userRepository.save(user);
+    }
 }
 

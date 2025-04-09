@@ -61,3 +61,13 @@ export const authApi = {
   getCurrentUser: () => axiosInstance.get("/api/auth/user"),
   logout: () => axiosInstance.post("/api/auth/logout"),
 };
+
+export const userApi = {
+    getUserProfile: () => axiosInstance.get("/api/user/profile"),
+    updateUser: (id, data) => axiosInstance.patch(`/api/user/update/${id}`, data),
+    deleteUser: (userId) =>
+        axiosInstance.post("/api/user/delete", null, {
+        params: { userId },
+        }),
+    fetchUsers: () => axiosInstance.get("/api/user/all"),
+}

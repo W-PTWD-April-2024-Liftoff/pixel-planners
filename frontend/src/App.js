@@ -7,7 +7,10 @@ import VerifyEmail from "./components/auth/VerifyEmail";
 import ResetPassword from "./components/auth/ResetPassword";
 import Dashboard from "./components/dashboard/Dashboard";
 import VenuePage from "./components/venue/VenuePage";
+import UserProfile from "./components/user/UserProfile";
 import "./App.css";
+import Welcome from "./components/welcome/Welcome";
+import Header from "./components/welcome/Header";
 
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
@@ -29,6 +32,7 @@ function App() {
     <AuthProvider>
       <div className="App">
         <Routes>
+           <Route path="/" element={<Welcome />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
@@ -41,10 +45,19 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <UserProfile />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/venues" element={<VenuePage />} />
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Routes>
-      </div>
+
+</div>
     </AuthProvider>
   );
 }
