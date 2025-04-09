@@ -50,19 +50,11 @@ const UserProfile = () => {
     setSelectedFile(e.target.files[0]);
   };
 
+
   const handleUpdate = (e) => {
     e.preventDefault();
     setLoading(true);
-
-    const updatedData = new FormData();
-    updatedData.append("name", formData.name);
-    updatedData.append("emailAddress", formData.emailAddress);
-    if (selectedFile) {
-      updatedData.append("picture", selectedFile);
-    }
-
-    userApi
-      .updateUser(formData.id, updatedData)
+    userApi.updateUser(formData)
       .then(() => {
         setSuccessMessage("Profile updated successfully!");
         setErrorMessage("");

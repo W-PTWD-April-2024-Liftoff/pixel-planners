@@ -64,7 +64,7 @@ export const authApi = {
 
 export const userApi = {
     getUserProfile: () => axiosInstance.get("/api/user/profile"),
-    updateUser: (id, data) => axiosInstance.patch(`/api/user/update/${id}`, data),
+    updateUser: (data) => axiosInstance.put("/api/user/update-profile", data),
     deleteUser: (userId) =>
         axiosInstance.post("/api/user/delete", null, {
         params: { userId },
