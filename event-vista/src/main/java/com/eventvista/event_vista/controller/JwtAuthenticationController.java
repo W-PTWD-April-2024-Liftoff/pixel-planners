@@ -354,6 +354,7 @@ public class JwtAuthenticationController {
 //    }
 
 
+    // Update user profile
     @PutMapping("/update-profile")
     public ResponseEntity<?> updateUserProfileJwt(@RequestBody UserProfileDTO profileDTO,
                                                   @RequestHeader("Authorization") String token) {
