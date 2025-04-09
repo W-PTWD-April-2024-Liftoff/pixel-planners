@@ -127,13 +127,12 @@ const Login = () => {
           />
           Sign in with Google
         </button>
-
+        /*added the link to welcome page*/
         <div className="back-to-welcome">
           <Link to="/" className="login-link">
             Back to Welcome Page
-          </Link>
+            </Link>
         </div>
-
       </div>
     </div>
   );

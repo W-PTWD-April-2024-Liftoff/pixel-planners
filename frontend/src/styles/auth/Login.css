@@ -105,11 +105,12 @@
   font-size: 0.875rem;
 }
 
+
 .back-to-welcome {
   text-align: center;
   margin-top: var(--spacing-md);
   font-size: 0.875rem;
-}
+  }
 
 .divider {
   position: relative;

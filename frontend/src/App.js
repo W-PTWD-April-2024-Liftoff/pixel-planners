@@ -45,6 +45,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          /*added routh to user profile*/
           <Route
             path="/profile"
             element={
