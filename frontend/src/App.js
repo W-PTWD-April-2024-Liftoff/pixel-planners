@@ -1,6 +1,7 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+<<<<<<< HEAD
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import VerifyEmail from "./components/auth/VerifyEmail";
@@ -8,6 +9,14 @@ import ResetPassword from "./components/auth/ResetPassword";
 import Dashboard from "./components/dashboard/Dashboard";
 import VenuePage from "./components/venue/VenuePage";
 import UserProfile from "./components/user/UserProfile";
+=======
+import Login from "./pages/Login/Login";
+import Register from "./pages/Register/Register";
+import VerifyEmail from "./pages/Account/VerifyEmail/VerifyEmail";
+import ResetPassword from "./pages/Account/ResetPassword/ResetPassword";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import VenuePage from "./pages/Venues/VenuePage";
+>>>>>>> origin/main
 import "./App.css";
 import Welcome from "./components/welcome/Welcome";
 import Header from "./components/welcome/Header";

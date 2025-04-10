@@ -47,12 +47,97 @@ axiosInstance.interceptors.response.use(
 );
 
 export const venueApi = {
-  getAllVenues: () => axiosInstance.get("/api/venues"),
-  getVenue: (id) => axiosInstance.get(`/api/venues/${id}`),
-  createVenue: (data) => axiosInstance.post("/api/venues", data),
-  updateVenue: (id, data) => axiosInstance.put(`/api/venues/${id}`, data),
-  deleteVenue: (id) => axiosInstance.delete(`/api/venues/${id}`),
-  getVenueEvents: (id) => axiosInstance.get(`/api/events/venue/${id}`),
+  getAllVenues: () => axiosInstance.get("/api/venues/all"),
+  getVenueById: (id) => axiosInstance.get(`/api/venues/find/${id}`),
+  getVenueByName: (name) => axiosInstance.get(`/api/venues/find/name/${name}`),
+  getVenueByLocation: (location) =>
+  axiosInstance.get(`/api/venues/find/location/${location}`),
+  getVenueByPhoneNumber: (phoneNumber) =>
+  axiosInstance.get(`/api/venues/find/phone/${phoneNumber}`),
+  getVenueByEmail: (emailAddress) =>
+  axiosInstance.get(`/api/venues/find/email/${emailAddress}`),
+  createVenue: (data) => axiosInstance.post("/api/venues/add", data),
+  updateVenue: (id, data) => axiosInstance.put(`/api/venues/update/${id}`, data),
+  deleteVenue: (id) => axiosInstance.delete(`/api/venues/delete/${id}`),
+};
+
+//export const eventApi = {
+//    getAllEvents:
+//    getEventById:
+//    createEvent:
+//    updateEvent:
+//    deleteEvent:
+//    getPastEvents:
+//    getUpcomingEvents:
+//    rebookEvent:
+//    getEventsByVenue:
+//    getEventsByClient:
+//    getEventsByVendor:
+//};
+
+export const eventApi = {
+  getAllEvents: () => axiosInstance.get("/api/events/all"),
+  getEventById: (id) => axiosInstance.get(`/api/events/find/${id}`),
+  getEventByName: (name) => axiosInstance.get(`/api/events/find/name/${name}`),
+  getEventsByVenue: (venueId) =>
+    axiosInstance.get(`/api/events/find/venue/${venueId}`),
+  getEventsByClient: (clientId) =>
+    axiosInstance.get(`/api/events/find/client/${clientId}`),
+  getEventsByVendor: (vendorId) =>
+    axiosInstance.get(`/api/events/find/vendor/${vendorId}`),
+  createEvent: (eventData) => axiosInstance.post("/api/events/add", eventData),
+  updateEvent: (id, eventData) =>
+    axiosInstance.put(`/api/events/update/${id}`, eventData),
+  deleteEvent: (id) => axiosInstance.delete(`/api/events/delete/${id}`),
+  rebookEvent: (id, rebookData) =>
+    axiosInstance.post(`/api/events/rebook/${id}`, rebookData),
+};
+
+//export const vendorApi = {
+//    getAllVendors:
+//    getVendorById:
+//    getVendorByName:
+//    getVendorByLocation:
+//    getVendorBySkills:
+//    getVendorByPhoneNumber:
+//    getVendorByEmail:
+//    createVendor:
+//    updateVendor:
+//    deleteVendor:
+//};
+
+//export const guestApi = {
+//    getAllGuests:
+//    createGuest:
+//    updateRsvp:
+//    deleteGuest:
+//};
+
+//export const clientApi = {
+//    getAllClients:
+//    getClientById:
+//    getClientByName:
+//    getClientByLocation:
+//    getClientByPhoneNumber:
+//    getClientByEmail:
+//    createClient:
+//    updateClient:
+//    deleteClient:
+//};
+
+//export const calendarApi = {
+//    getCalendarByUser: (userId) =>
+//       axiosInstance.get(`/api/calendars/user/${userId}`),
+//    updateCalendar: (id, data) => axiosInstance.put(`/api/calendars/${id}`, data),
+//    deleteCalendar: (id) => axiosInstance.delete(`/api/calendars/${id}`),
+//};
+
+export const calendarApi = {
+  getMyCalendar: () => axiosInstance.get("/api/calendars/my"),
+  getCalendarById: (id) => axiosInstance.get(`/api/calendars/${id}`),
+  addCalendar: (calendarData) =>
+    axiosInstance.post("/api/calendars", calendarData),
+  deleteCalendar: (id) => axiosInstance.delete(`/api/calendars/${id}`),
 };
 
 export const authApi = {
