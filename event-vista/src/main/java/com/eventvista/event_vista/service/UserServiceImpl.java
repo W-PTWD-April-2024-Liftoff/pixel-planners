@@ -4,6 +4,7 @@ import com.eventvista.event_vista.model.User;
 import com.eventvista.event_vista.data.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.eventvista.event_vista.model.dto.UserProfileDTO;
 
 import java.util.Optional;
 

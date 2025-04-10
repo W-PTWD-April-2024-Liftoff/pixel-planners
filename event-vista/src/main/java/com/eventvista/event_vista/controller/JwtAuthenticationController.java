@@ -394,9 +394,5 @@ public class JwtAuthenticationController {
         }
         return ResponseEntity.status(401).body("Invalid or expired token");
     }
-
-//    @PostMapping("/delete")
-//    public void deleteUser(@RequestParam Integer userId){
-//        userRepository.deleteById(userId);
-//    }
+    
 }
