@@ -88,6 +88,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                     .queryParam("error", "OAuth2 authentication failed")
                     .build().toUriString();
 
+            System.out.println("Redirecting to: " + redirectUrl); // Add a debug log
+
             getRedirectStrategy().sendRedirect(request, response, redirectUrl);
         }
     }

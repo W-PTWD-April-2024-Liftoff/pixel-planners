@@ -377,4 +377,26 @@ public class JwtAuthenticationController {
         }
         return ResponseEntity.status(401).body("Invalid or expired token");
     }
+
+    @PostMapping("/delete")
+    public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String token) {
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);
+            if (tokenProvider.validateToken(token)) {
+                String email = tokenProvider.getUsernameFromToken(token);
+                Optional<User> userOpt = userRepository.findByEmailAddress(email);
+                if (userOpt.isPresent()) {
+                    User user = userOpt.get();
+                    userRepository.delete(user);
+                    return ResponseEntity.ok("User deleted successfully");
+                }
+            }
+        }
+        return ResponseEntity.status(401).body("Invalid or expired token");
+    }
+
+//    @PostMapping("/delete")
+//    public void deleteUser(@RequestParam Integer userId){
+//        userRepository.deleteById(userId);
+//    }
 }
