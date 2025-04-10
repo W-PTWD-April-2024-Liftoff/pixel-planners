@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import Calendar from "../calendar/Calendar";
 import "../../styles/components.css";
-import { use Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const { user, logout, token } = useAuth();
@@ -13,8 +13,9 @@ const Dashboard = () => {
 
 const redirectToUserProfile = () => {
     navigate("/profile"); // Redirect to user profile page
-  }
-}
+  };
+
+
 
   useEffect(() => {
     if (token) {

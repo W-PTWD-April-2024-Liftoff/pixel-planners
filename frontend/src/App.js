@@ -11,6 +11,7 @@ import UserProfile from "./components/user/UserProfile";
 import "./App.css";
 import Welcome from "./components/welcome/Welcome";
 import Header from "./components/welcome/Header";
+import OAuth2RedirectHandler from "./components/auth/OAuth2RedirectHandler";
 
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
@@ -37,6 +38,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
           <Route
             path="/dashboard"
             element={

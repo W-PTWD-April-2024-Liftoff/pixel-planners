@@ -60,11 +60,12 @@ export const authApi = {
   register: (userData) => axiosInstance.post("/api/auth/register", userData),
   getCurrentUser: () => axiosInstance.get("/api/auth/user"),
   logout: () => axiosInstance.post("/api/auth/logout"),
+  getOAuthUrl: () => "http://localhost:8080/oauth2/authorization/google"
 };
 
 export const userApi = {
-    getUserProfile: () => axiosInstance.get("/api/user/profile"),
-    updateUser: (data) => axiosInstance.put("/api/user/update-profile", data),
+    getUserProfile: () => axiosInstance.get("/api/auth/profile"),
+    updateUser: (data) => axiosInstance.put("/api/auth/update-profile", data),
     deleteUser: (userId) =>
         axiosInstance.post("/api/user/delete", null, {
         params: { userId },
