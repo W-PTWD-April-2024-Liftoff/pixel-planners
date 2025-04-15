@@ -2,7 +2,6 @@ package com.eventvista.event_vista.controller;
 
 import com.eventvista.event_vista.model.*;
 import com.eventvista.event_vista.service.ClientService;
-import com.eventvista.event_vista.service.VenueService;
 import com.eventvista.event_vista.utilities.AuthUtil;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -26,7 +25,6 @@ public class ClientController {
         this.authUtil = authUtil;
     }
 
-
     @GetMapping("/all")
     public ResponseEntity<List<Client>> getAllClients () {
         User user = authUtil.getUserFromAuthentication();
@@ -34,13 +32,10 @@ public class ClientController {
         return ResponseEntity.ok(clients);
     }
 
-
     @GetMapping("/find/{id}")
     public ResponseEntity<Client> getClientById (@PathVariable("id") Integer id) {
         User user = authUtil.getUserFromAuthentication();
         return ResponseEntity.of(clientService.findClientById(id, user));
-
-
     }
 
     @GetMapping("/find/name/{name}")
@@ -61,9 +56,6 @@ public class ClientController {
         User user = authUtil.getUserFromAuthentication();
         return ResponseEntity.of(clientService.findClientByEmailAddress(emailAddress, user));
     }
-
-
-
 
     @PostMapping("/add")
     public ResponseEntity<?> addClient (@Valid @RequestBody Client client, BindingResult bindingResult) {
@@ -86,9 +78,6 @@ public class ClientController {
         }
     }
 
-
-
-
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateClient(@PathVariable("id") Integer id, @Valid @RequestBody Client updatedClient, BindingResult bindingResult) {
 
@@ -108,8 +97,6 @@ public class ClientController {
             return ResponseEntity.badRequest().body(response);
         }
     }
-
-
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteClient(@PathVariable("id") Integer id) {
