@@ -7,6 +7,7 @@ import VerifyEmail from "./pages/Account/VerifyEmail/VerifyEmail";
 import ResetPassword from "./pages/Account/ResetPassword/ResetPassword";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import VenuePage from "./pages/Venues/VenuePage";
+import ClientPage from "./pages/Clients/ClientPage";
 import "./App.css";
 
 // Protected Route component
@@ -42,6 +43,7 @@ function App() {
             }
           />
           <Route path="/venues" element={<VenuePage />} />
+          <Route path="/clients" element={<ClientPage />} />
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </div>
