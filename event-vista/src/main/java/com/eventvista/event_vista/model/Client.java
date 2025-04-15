@@ -1,5 +1,6 @@
 package com.eventvista.event_vista.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -28,6 +29,11 @@ public class Client extends AbstractEntity {
 
     @OneToMany(mappedBy = "client")
     private List<Event> events = new ArrayList<>();
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Client() {
     }
@@ -84,4 +90,11 @@ public class Client extends AbstractEntity {
         return name;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
