@@ -55,8 +55,11 @@ const handleChange = (e) => {
     if (validateForm()) {
       try {
         // Submit the form data directly
-        console.log("Submitting guest data:", formData);
-        onSubmit(formData);
+        const guestData = {
+            ...formData,
+            }
+        console.log("Submitting guest data:", guestData);
+        onSubmit(guestData);
       } catch (error) {
         console.error("Error saving guest:", error);
         setErrors((prev) => ({

@@ -65,6 +65,8 @@ export const clientApi = {
   getAllClients: () => axiosInstance.get("/api/clients/all"),
   getClientById: (id) => axiosInstance.get(`/api/clients/find/${id}`),
   getClientByName: (name) => axiosInstance.get(`/api/clients/find/name/${name}`),
+  getClientByLocation: (location) =>
+  axiosInstance.get(`/api/clients/find/location/${location}`),
   getClientByPhoneNumber: (phoneNumber) =>
   axiosInstance.get(`/api/clients/find/phone/${phoneNumber}`),
   getClientByEmail: (emailAddress) =>
@@ -79,7 +81,7 @@ export const guestApi = {
       getGuestById: (id) => axiosInstance.get(`/api/guests/find/${id}`),
       getGuestByEmail: (email) => axiosInstance.get(`/api/guests/find/email/${email}`),
       getGuestsByGuestList: (guestListId) => axiosInstance.get(`/api/guests/find/guestListId/${guestListId}`),
-      addGuest: (guestData) => axiosInstance.post("/api/guests/add", guestData),
+      createGuest: (guestData) => axiosInstance.post("/api/guests/add", guestData),
       updateGuest: (id, guestData) => axiosInstance.put(`/api/guests/update/${id}`, guestData),
       deleteGuest: (id) => axiosInstance.delete(`/api/guests/delete/${id}`),
     };
