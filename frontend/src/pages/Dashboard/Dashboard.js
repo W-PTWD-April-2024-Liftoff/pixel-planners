@@ -123,7 +123,6 @@ const Dashboard = () => {
               <span className="card-content">
                 Welcome, {user?.name || "User"}
               </span>
-// removed this area in merge conflict
               <img
                 src={user.pictureUrl}
                 alt="Profile"
@@ -132,7 +131,6 @@ const Dashboard = () => {
                             <button onClick={redirectToUserProfile} className="button button-primary">
                             Profile
                               </button>
-// end of merge conflict
               <button
                 onClick={handleAddEvent}
                 className="button button-primary"
