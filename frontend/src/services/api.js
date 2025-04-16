@@ -74,6 +74,17 @@ export const clientApi = {
   deleteClient: (id) => axiosInstance.delete(`/api/clients/delete/${id}`),
 };
 
+export const guestApi = {
+      getAllGuests: () => axiosInstance.get("/api/guests/all"),
+      getGuestById: (id) => axiosInstance.get(`/api/guests/find/${id}`),
+      getGuestByEmail: (email) => axiosInstance.get(`/api/guests/find/email/${email}`),
+      getGuestsByGuestList: (guestListId) => axiosInstance.get(`/api/guests/find/guestListId/${guestListId}`),
+      addGuest: (guestData) => axiosInstance.post("/api/guests/add", guestData),
+      updateGuest: (id, guestData) => axiosInstance.put(`/api/guests/update/${id}`, guestData),
+      deleteGuest: (id) => axiosInstance.delete(`/api/guests/delete/${id}`),
+    };
+
+
 //export const eventApi = {
 //    getAllEvents:
 //    getEventById:
