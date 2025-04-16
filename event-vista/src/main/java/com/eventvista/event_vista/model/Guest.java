@@ -1,5 +1,6 @@
 package com.eventvista.event_vista.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -18,16 +19,19 @@ public class Guest extends AbstractEntity{
     @Enumerated(EnumType.STRING)
     private RSVPStatus rsvpStatus = RSVPStatus.PENDING;
 
+    private String notes;
+
     @ManyToOne
     //JoinColumn(name = "guest_list_id")
     private GuestList guestList;
 
     public Guest() {}
 
-    public Guest(String name, String emailAddress, GuestList guestList) {
+    public Guest(String name, String emailAddress, GuestList guestList, String notes) {
         this.name = name;
         this.emailAddress = emailAddress;
         this.guestList = guestList;
+        this.notes = notes;
         //this.rsvpStatus = RSVPStatus.PENDING;
     }
 
@@ -37,6 +41,14 @@ public class Guest extends AbstractEntity{
 
     public void setName(@NotBlank @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters") String name) {
         this.name = name;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     public @Email String getEmailAddress() {
@@ -66,5 +78,3 @@ public class Guest extends AbstractEntity{
     public void setRsvp(boolean rsvpStatus) {
     }
 }
-
-
