@@ -68,9 +68,6 @@ public ResponseEntity<Venue> getVenueById (@PathVariable("id") Integer id) {
         return ResponseEntity.of(venueService.findVenueByEmailAddress(emailAddress, user));
     }
 
-
-
-
     @PostMapping("/add")
     public ResponseEntity<?> addVenue (@Valid @RequestBody Venue venue, BindingResult bindingResult) {
         try {
@@ -91,9 +88,6 @@ public ResponseEntity<Venue> getVenueById (@PathVariable("id") Integer id) {
             return ResponseEntity.badRequest().body(response);
         }
     }
-
-
-
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateVenue(@PathVariable("id") Integer id, @Valid @RequestBody Venue updatedVenue, BindingResult bindingResult) {
