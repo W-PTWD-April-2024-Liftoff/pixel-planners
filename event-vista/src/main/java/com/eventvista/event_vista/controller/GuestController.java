@@ -1,36 +1,81 @@
 package com.eventvista.event_vista.controller;
 
-import com.eventvista.event_vista.model.Guest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import com.eventvista.event_vista.service.GuestService;
 
+import com.eventvista.event_vista.model.Guest;
+import com.eventvista.event_vista.service.GuestService;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/guests")
+@RequestMapping("/api/guests")
+@CrossOrigin(origins = "http://localhost:3000")
 public class GuestController {
+    private final GuestService guestService;
 
-    @Autowired
-    private GuestService guestService;
-
-    @PostMapping("/add")
-    public Guest addGuest(@RequestBody Guest guest) {
-        return guestService.addGuest(guest);
+    public GuestController(GuestService guestService) {
+        this.guestService = guestService;
     }
 
     @GetMapping("/all")
-    public List<Guest> getAllGuests() {
-        return guestService.getAllGuests();
+    public ResponseEntity<List<Guest>> getAllGuests() {
+        return ResponseEntity.ok(guestService.getAllGuests());
     }
 
-    @PutMapping("/update-rsvp")
-    public String updateRsvp(@RequestParam String email, @RequestParam boolean rsvp) {
-        return guestService.updateRsvp(email, rsvp) ? "RSVP updated successfully" : "Guest not found";
+    @GetMapping("/find/{id}")
+    public ResponseEntity<Guest> getGuestById(@PathVariable Integer id) {
+        return ResponseEntity.of(guestService.getGuestById(id));
     }
 
-    @DeleteMapping("/remove")
-    public String removeGuest(@RequestParam String email) {
-        return guestService.removeGuest(email) ? "Guest removed successfully" : "Guest not found";
+    @GetMapping("/find/email/{email}")
+    public ResponseEntity<Guest> getGuestByEmail(@PathVariable String email) {
+        return ResponseEntity.of(guestService.getGuestByEmail(email));
+    }
+
+    @GetMapping("/by-guestlist/{guestListId}")
+    public ResponseEntity<List<Guest>> getGuestsByGuestList(@PathVariable Integer guestListId) {
+        return ResponseEntity.ok(guestService.getGuestsByGuestListId(guestListId));
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<?> addGuest(@Valid @RequestBody Guest guest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error ->
+                    errors.put(error.getField(), error.getDefaultMessage())
+            );
+            return ResponseEntity.badRequest().body(errors);
+        }
+        Guest savedGuest = guestService.addGuest(guest);
+        return ResponseEntity.ok(savedGuest);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateGuest(@PathVariable Integer id, @Valid @RequestBody Guest guest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error ->
+                    errors.put(error.getField(), error.getDefaultMessage())
+            );
+            return ResponseEntity.badRequest().body(errors);
+        }
+
+        return guestService.updateGuest(id, guest)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteGuest(@PathVariable Integer id) {
+        if (guestService.deleteGuest(id)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

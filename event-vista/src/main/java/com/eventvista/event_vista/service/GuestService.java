@@ -1,9 +1,8 @@
 package com.eventvista.event_vista.service;
 
-
 import com.eventvista.event_vista.data.GuestRepository;
 import com.eventvista.event_vista.model.Guest;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,32 +10,46 @@ import java.util.Optional;
 
 @Service
 public class GuestService {
-    @Autowired
-    private GuestRepository guestRepository;
+    private final GuestRepository guestRepository;
+
+    public GuestService(GuestRepository guestRepository) {
+        this.guestRepository = guestRepository;
+    }
 
     public Guest addGuest(Guest guest) {
         return guestRepository.save(guest);
     }
 
     public List<Guest> getAllGuests() {
-        return (List<Guest>) guestRepository.findAll();
+        return guestRepository.findAll();
     }
 
-    public boolean updateRsvp(String emailAddress, boolean rsvpStatus) {
-        Optional<Guest> guestOpt = guestRepository.findByEmailAddress(emailAddress);
-        if (guestOpt.isPresent()) {
-            Guest guest = guestOpt.get();
-            guest.setRsvp(rsvpStatus);
-            guestRepository.save(guest);
-            return true;
-        }
-        return false;
+    public Optional<Guest> getGuestById(Integer id) {
+        return guestRepository.findById(id);
     }
 
-    public boolean removeGuest(String emailAddress) {
-        Optional<Guest> guestOpt = guestRepository.findByEmailAddress(emailAddress);
-        if (guestOpt.isPresent()) {
-            guestRepository.delete(guestOpt.get());
+    public Optional<Guest> getGuestByEmail(String email) {
+        return guestRepository.findByEmailAddress(email);
+    }
+
+    public List<Guest> getGuestsByGuestListId(Integer guestListId) {
+        return guestRepository.findByGuestListId(guestListId);
+    }
+
+    public Optional<Guest> updateGuest(Integer id, Guest updatedGuest) {
+        return guestRepository.findById(id).map(guest -> {
+            guest.setName(updatedGuest.getName());
+            guest.setEmailAddress(updatedGuest.getEmailAddress());
+            guest.setNotes(updatedGuest.getNotes());
+            guest.setRsvpStatus(updatedGuest.getRsvpStatus());
+            guest.setGuestList(updatedGuest.getGuestList());
+            return guestRepository.save(guest);
+        });
+    }
+
+    public boolean deleteGuest(Integer id) {
+        if (guestRepository.existsById(id)) {
+            guestRepository.deleteById(id);
             return true;
         }
         return false;
