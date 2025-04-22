@@ -157,6 +157,52 @@ export const eventApi = {
 //    deleteCalendar: (id) => axiosInstance.delete(`/api/calendars/${id}`),
 //};
 
+export const vendorApi = {
+  getAllVendors: () => axiosInstance.get("/api/vendors/all"),
+  getVendorById: (id) => axiosInstance.get(`/api/vendors/find/${id}`),
+  getVendorByName: (name) => axiosInstance.get(`/api/vendors/find/name/${name}`),
+  getVendorBySkillId: (skillId) =>
+    axiosInstance.get(`/api/vendors/find/skills/id/${skillId}`),
+  getVendorBySkillName: (skillName) =>
+    axiosInstance.get(`/api/vendors/find/skills/name/${encodeURIComponent(skillName)}`),
+  removeSkillFromVendors: (skillId) =>
+      axiosInstance.delete(`/api/vendors/delete/skills/${skillId}`),
+  getVendorByLocation: (location) =>
+    axiosInstance.get(`/api/vendors/find/location/${location}`),
+  getVendorByPhoneNumber: (phoneNumber) =>
+    axiosInstance.get(`/api/vendors/find/phone/${phoneNumber}`),
+  getVendorByEmail: (emailAddress) =>
+    axiosInstance.get(`/api/vendors/find/email/${emailAddress}`),
+  createVendor: (vendorData) => axiosInstance.post("/api/vendors/add", vendorData),
+  updateVendor: (id, vendorData) => axiosInstance.put(`/api/vendors/update/${id}`, vendorData),
+  deleteVendor: (id) => axiosInstance.delete(`/api/vendors/delete/${id}`),
+
+};
+
+export const skillApi = {
+  getAllSkills: () => axiosInstance.get("/api/skills/all"),
+  getSkillById: (id) => axiosInstance.get(`/api/skills/find/${id}`),
+  getSkillByName: (name) => axiosInstance.get(`/api/skills/find/name/${name}`),
+  createSkill: (data) => axiosInstance.post("/api/skills/add", data),
+  updateSkill: (id, data) => axiosInstance.put(`/api/skills/update/${id}`, data),
+  deleteSkill: (id) => axiosInstance.delete(`/api/skills/delete/${id}`),
+};
+
+export const clientApi = {
+  getAllClients: () => axiosInstance.get("/api/clients/all"),
+  getClientById: (id) => axiosInstance.get(`/api/clients/find/${id}`),
+  getClientByName: (name) => axiosInstance.get(`/api/clients/find/name/${name}`),
+  getClientByLocation: (location) =>
+  axiosInstance.get(`/api/clients/find/location/${location}`),
+  getClientByPhoneNumber: (phoneNumber) =>
+  axiosInstance.get(`/api/clients/find/phone/${phoneNumber}`),
+  getClientByEmail: (emailAddress) =>
+  axiosInstance.get(`/api/clients/find/email/${emailAddress}`),
+  createClient: (data) => axiosInstance.post("/api/clients/add", data),
+  updateClient: (id, data) => axiosInstance.put(`/api/clients/update/${id}`, data),
+  deleteClient: (id) => axiosInstance.delete(`/api/clients/delete/${id}`),
+};
+
 export const calendarApi = {
   getMyCalendar: () => axiosInstance.get("/api/calendars/my"),
   getCalendarById: (id) => axiosInstance.get(`/api/calendars/${id}`),
