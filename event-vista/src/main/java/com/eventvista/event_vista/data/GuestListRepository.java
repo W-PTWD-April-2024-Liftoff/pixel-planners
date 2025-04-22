@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface GuestListRepository extends JpaRepository<GuestList,Integer> {
     List<GuestList> findAllByEvent_User(User user);
+
 }
