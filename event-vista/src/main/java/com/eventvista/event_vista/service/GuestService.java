@@ -2,8 +2,11 @@ package com.eventvista.event_vista.service;
 
 import com.eventvista.event_vista.data.GuestRepository;
 import com.eventvista.event_vista.model.Guest;
+import com.eventvista.event_vista.model.GuestList;
+import com.eventvista.event_vista.model.RSVPStatus;
 import com.eventvista.event_vista.model.User;
-import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,48 +20,62 @@ public class GuestService {
         this.guestRepository = guestRepository;
     }
 
-    public List<Guest> findAllGuests(User user) {
-        return guestRepository.findAllByUser(user);
+    // Find all guests by guest list
+    public List<Guest> findAllGuestByGuestList(GuestList guestList) {
+        return guestRepository.findByGuestList_Id(guestList.getId());
+    }
+
+    // Find guest by ID and guest list
+    public Optional<Guest> findGuestById(Integer id,GuestList guestList) {
+        return guestRepository.findById(id).filter(guest -> guest.getGuestList().getId().equals(guestList.getId()));
+    }
+
+    // Find guest by email and guest list
+    public Optional<Guest> findGuestByEmail(String email,GuestList guestList) {
+        return guestRepository.findByEmailAddressAndGuestList_Id(email,guestList.getId());
+    }
+
+    // Filter guests by RSVP status
+    public List<Guest> findGuestByRSVPStatus(RSVPStatus status) {
+        return guestRepository.findByRsvpStatus(status);
+    }
+
+    // Guests by guest list and RSVP status
+    public List<Guest> findGuestByGuestListAndRSVP(GuestList guestList,RSVPStatus status) {
+        return guestRepository.findByGuestList_IdAndRsvpStatus(guestList.getId(),status);
+    }
+
+    public List<Guest> findAllGuestsByGuestList(GuestList guestList) {
+        return guestRepository.findByGuestList_Id(guestList.getId());
     }
 
 
-    
-    public Guest addGuest(Guest guest) {
+    // Add a new guest
+    public Guest addGuest(Guest guest,GuestList guestList) {
+        guest.setGuestList(guestList);
         return guestRepository.save(guest);
     }
 
-    public List<Guest> getAllGuests() {
-        return guestRepository.findAll();
+    // Update a guest
+    public Optional<Guest> updateGuest(Integer id,Guest updatedGuest,GuestList guestList) {
+        return guestRepository.findById(id)
+                .filter(guest -> guest.getGuestList().getId().equals(guestList.getId()))
+                .map(guest -> {
+                    guest.setName(updatedGuest.getName());
+                    guest.setEmailAddress(updatedGuest.getEmailAddress());
+                    guest.setNotes(updatedGuest.getNotes());
+                    guest.setRsvpStatus(updatedGuest.getRsvpStatus());
+                    return guestRepository.save(guest);
+                });
     }
 
-    public Optional<Guest> getGuestById(Integer id) {
-        return guestRepository.findById(id);
-    }
-
-    public Optional<Guest> getGuestByEmail(String email) {
-        return guestRepository.findByEmailAddress(email);
-    }
-
-    public List<Guest> getGuestsByGuestListId(Integer guestListId) {
-        return guestRepository.findByGuestListId(guestListId);
-    }
-
-    public Optional<Guest> updateGuest(Integer id, Guest updatedGuest) {
-        return guestRepository.findById(id).map(guest -> {
-            guest.setName(updatedGuest.getName());
-            guest.setEmailAddress(updatedGuest.getEmailAddress());
-            guest.setNotes(updatedGuest.getNotes());
-            guest.setRsvpStatus(updatedGuest.getRsvpStatus());
-            guest.setGuestList(updatedGuest.getGuestList());
-            return guestRepository.save(guest);
-        });
-    }
-
-    public boolean deleteGuest(Integer id) {
-        if (guestRepository.existsById(id)) {
-            guestRepository.deleteById(id);
-            return true;
-        }
-        return false;
+    // Delete guest
+    public boolean deleteGuest(Integer id,GuestList guestList) {
+        return guestRepository.findById(id)
+                .filter(guest -> guest.getGuestList().getId().equals(guestList.getId()))
+                .map(guest -> {
+                    guestRepository.delete(guest);
+                    return true;
+                }).orElse(false);
     }
 }

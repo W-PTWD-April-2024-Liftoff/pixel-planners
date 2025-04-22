@@ -59,9 +59,6 @@ public class ClientController {
         return ResponseEntity.of(clientService.findClientByEmailAddress(emailAddress, user));
     }
 
-
-
-
     @PostMapping("/add")
     public ResponseEntity<?> addClient (@Valid @RequestBody Client client, BindingResult bindingResult) {
         try {
