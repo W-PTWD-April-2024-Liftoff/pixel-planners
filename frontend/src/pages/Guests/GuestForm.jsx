@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { clientApi } from "../../services/api";
 import "../../styles/components.css";
-import styles from "./GuestForm.module.css";
+import styles from "./GuestForm.module.css"; // Reuse if layout is similar
 
 const GuestForm = ({ initialData, onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
     name: "",
     emailAddress: "",
-    rsvpStatus: "pending",
     notes: "",
+    rsvpStatus: "PENDING",
+    ...(initialData || {}),
   });
 
   const [errors, setErrors] = useState({});
@@ -24,26 +24,15 @@ const GuestForm = ({ initialData, onSubmit, onCancel }) => {
     ) {
       newErrors.emailAddress = "Please enter a valid email address";
     }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     if (name === "phoneNumber") {
-//       setFormData((prev) => ({
-//         ...prev,
-//         phoneNumber: {
-//           phoneNumber: value,
-//           isValid: validatePhoneNumber(value),
-//         },
-//       }));
-//     } else {
-//       setFormData((prev) => ({ ...prev, [name]: value }));
-//     }
-const handleChange = (e) => {
-  const { name, value } = e.target;
-  setFormData((prev) => ({ ...prev, [name]: value }));
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
@@ -54,12 +43,7 @@ const handleChange = (e) => {
     e.preventDefault();
     if (validateForm()) {
       try {
-        // Submit the form data directly
-        const guestData = {
-            ...formData,
-            }
-        console.log("Submitting guest data:", guestData);
-        onSubmit(guestData);
+        onSubmit(formData);
       } catch (error) {
         console.error("Error saving guest:", error);
         setErrors((prev) => ({
@@ -73,9 +57,7 @@ const handleChange = (e) => {
   return (
     <div className="form-container">
       <div className="form-header">
-        <h2 className="form-title">
-          {initialData ? "Edit Guest" : "Add New Guest"}
-        </h2>
+        <h2 className="form-title">{initialData ? "Edit Guest" : "Add New Guest"}</h2>
         <p className="form-subtitle">Enter the guest details below</p>
       </div>
 
@@ -114,19 +96,13 @@ const handleChange = (e) => {
             name="rsvpStatus"
             value={formData.rsvpStatus}
             onChange={handleChange}
-            className={`form-input ${errors.rsvpStatus ? "error" : ""}`}
-            required
+            className="form-input"
           >
-            <option value="">Select RSVP Status</option>
-            <option value="Confirmed">Confirmed</option>
-            <option value="Pending">Pending</option>
-            <option value="Declined">Declined</option>
+            <option value="PENDING">Pending</option>
+            <option value="ACCEPTED">Accepted</option>
+            <option value="DECLINED">Declined</option>
           </select>
-          {errors.rsvpStatus && (
-            <div className="error-text">{errors.rsvpStatus}</div>
-          )}
         </div>
-
 
         <div className="form-group">
           <label className="form-label">Notes</label>
@@ -145,11 +121,7 @@ const handleChange = (e) => {
           <button type="submit" className="button button-primary">
             {initialData ? "Update Guest" : "Create Guest"}
           </button>
-          <button
-            type="button"
-            onClick={onCancel}
-            className="button button-secondary"
-          >
+          <button type="button" onClick={onCancel} className="button button-secondary">
             Cancel
           </button>
         </div>

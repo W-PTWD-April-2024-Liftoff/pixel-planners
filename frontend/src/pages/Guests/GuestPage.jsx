@@ -4,9 +4,10 @@ import { guestApi } from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
 import "../../styles/components.css";
 import GuestForm from "./GuestForm";
-//import GuestSearch from "./GuestSearch";
-//import GuestSearchResults from "./GuestSearchResults";
+import GuestSearch from "./GuestSearch";
+import GuestSearchResults from "./GuestSearchResults";
 import Modal from "../../components/common/Modal/Modal";
+//import Sidebar from "../Dashboard/Sidebar";
 
 const GuestPage = () => {
   const [guests, setGuests] = useState([]);
@@ -17,7 +18,6 @@ const GuestPage = () => {
   const { isAuthenticated, token, logout } = useAuth();
   const navigate = useNavigate();
 
-  // Search state
   const [searchTerm, setSearchTerm] = useState("");
   const [searchType, setSearchType] = useState("name");
   const [searchResults, setSearchResults] = useState([]);
@@ -61,32 +61,26 @@ const GuestPage = () => {
     }
 
     try {
-      let result;
-      console.log("Searching for:", searchTerm, "by type:", searchType);
-
+      let response;
       switch (searchType) {
         case "name":
-          result = await guestApi.getGuestByName(searchTerm);
-          console.log("Name search result:", result);
+          response = await guestApi.getGuestByName(searchTerm);
           break;
         case "email":
-          result = await guestApi.getGuestByByEmail(searchTerm);
-          console.log("Email search result:", result);
+          response = await guestApi.getGuestByEmail(searchTerm);
           break;
         default:
-          result = [];
+          response = { data: [] };
       }
 
-      // Extract data from response if it exists
-      if (result && result.data) {
-        result = result.data;
+      let results = [];
+      if (response && response.data) {
+        results = Array.isArray(response.data)
+          ? response.data
+          : [response.data];
       }
 
-      // Ensure result is an array
-      const searchResults = Array.isArray(result) ? result : [result];
-      console.log("Final search results:", searchResults);
-
-      setSearchResults(searchResults.filter((item) => item !== null));
+      setSearchResults(results.filter((item) => item !== null));
     } catch (err) {
       console.error("Error searching guests:", err);
       setSearchResults([]);
@@ -120,8 +114,8 @@ const GuestPage = () => {
     if (window.confirm("Are you sure you want to delete this guest?")) {
       try {
         await guestApi.deleteGuest(guestId);
-        setGuests(guests.filter((guest) => guest.id !== guestId));
-        setSearchResults(searchResults.filter((guest) => guest.id !== guestId));
+        setGuests(guests.filter((g) => g.id !== guestId));
+        setSearchResults(searchResults.filter((g) => g.id !== guestId));
         setError(null);
       } catch (err) {
         console.error("Error deleting guest:", err);
@@ -142,23 +136,19 @@ const GuestPage = () => {
 
     try {
       if (selectedGuest) {
-        // Update existing guest
         const response = await guestApi.updateGuest(
           selectedGuest.id,
           guestData
         );
         setGuests(
-          guests.map((guest) =>
-            guest.id === selectedGuest.id ? response.data : guest
-          )
+          guests.map((g) => (g.id === selectedGuest.id ? response.data : g))
         );
         setSearchResults(
-          searchResults.map((guest) =>
-            guest.id === selectedGuest.id ? response.data : guest
+          searchResults.map((g) =>
+            g.id === selectedGuest.id ? response.data : g
           )
         );
       } else {
-        // Create new guest
         const response = await guestApi.createGuest(guestData);
         setGuests([...guests, response.data]);
         setSearchResults([...searchResults, response.data]);
@@ -177,7 +167,7 @@ const GuestPage = () => {
   };
 
   if (!isAuthenticated || !token) {
-    return null; // Will redirect in useEffect
+    return null;
   }
 
   if (loading) {
@@ -189,49 +179,63 @@ const GuestPage = () => {
   }
 
   return (
-    <div className="container" style={{ padding: "2rem" }}>
-      <div className="dashboard-header">
-        <h2 className="dashboard-title">Guests</h2>
-        <p className="dashboard-subtitle">Manage your guests</p>
+    <div
+      className="profile-layout"
+      style={{ display: "flex", minHeight: "100vh" }}
+    >
+      <Sidebar />
+      <div
+        className="container"
+        style={{
+          padding: "2rem",
+          marginLeft: "200px",
+          flex: 1,
+          boxSizing: "border-box",
+        }}
+      >
+        <div className="dashboard-header">
+          <h2 className="dashboard-title">Guests</h2>
+          <p className="dashboard-subtitle">Manage your guests</p>
 
-{/*         <GuestSearch */}
-{/*           searchTerm={searchTerm} */}
-{/*           setSearchTerm={setSearchTerm} */}
-{/*           searchType={searchType} */}
-{/*           setSearchType={setSearchType} */}
-{/*           onSearch={handleSearch} */}
-{/*         /> */}
-
-        <button
-          className="button button-primary"
-          onClick={handleAddGuest}
-          style={{ marginTop: "1rem" }}
-        >
-          Add New Guest
-        </button>
-      </div>
-
-      {error && (
-        <div className="error-message" style={{ marginBottom: "1rem" }}>
-          {error}
-        </div>
-      )}
-
-{/*       <GuestSearchResults */}
-{/*         guests={searchResults} */}
-{/*         onEdit={handleEditGuest} */}
-{/*         onDelete={handleDeleteGuest} */}
-{/*       /> */}
-
-      {showGuestForm && (
-        <Modal onClose={() => setShowGuestForm(false)}>
-          <GuestForm
-            initialData={selectedGuest}
-            onSubmit={handleGuestSubmit}
-            onCancel={() => setShowGuestForm(false)}
+          <GuestSearch
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            searchType={searchType}
+            setSearchType={setSearchType}
+            onSearch={handleSearch}
           />
-        </Modal>
-      )}
+
+          <button
+            className="button button-primary"
+            onClick={handleAddGuest}
+            style={{ marginTop: "1rem" }}
+          >
+            Add New Guest
+          </button>
+        </div>
+
+        {error && (
+          <div className="error-message" style={{ marginBottom: "1rem" }}>
+            {error}
+          </div>
+        )}
+
+        <GuestSearchResults
+          guests={searchResults}
+          onEdit={handleEditGuest}
+          onDelete={handleDeleteGuest}
+        />
+
+        {showGuestForm && (
+          <Modal onClose={() => setShowGuestForm(false)}>
+            <GuestForm
+              initialData={selectedGuest}
+              onSubmit={handleGuestSubmit}
+              onCancel={() => setShowGuestForm(false)}
+            />
+          </Modal>
+        )}
+      </div>
     </div>
   );
 };
