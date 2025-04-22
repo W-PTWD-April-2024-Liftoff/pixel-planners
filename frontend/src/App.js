@@ -7,6 +7,7 @@ import VerifyEmail from "./pages/Account/VerifyEmail/VerifyEmail";
 import ResetPassword from "./pages/Account/ResetPassword/ResetPassword";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import VenuePage from "./pages/Venues/VenuePage";
+import GuestPage from "./pages/Guests/GuestPage";
 import "./App.css";
 import Welcome from "./pages/Welcome/Welcome";
 import Header from "./pages/Welcome/Header";
@@ -56,6 +57,7 @@ function App() {
                       }
                     />
           <Route path="/venues" element={<VenuePage />} />
+          <Route path="/guests" element={<GuestPage />} />
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </div>
