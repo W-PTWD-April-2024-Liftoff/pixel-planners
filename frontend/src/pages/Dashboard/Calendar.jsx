@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import styles from "./Calendar.module.css";
+import EventActionsModal from "../../components/EventActionsModal/EventActionsModal";
 
-const Calendar = ({ events = [] }) => {
+const Calendar = ({ events = [], onEventUpdated }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMode, setViewMode] = useState("month");
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [showEventModal, setShowEventModal] = useState(false);
 
   const formatTime = (timeStr) => {
     if (!timeStr) return "";
@@ -116,6 +119,19 @@ const Calendar = ({ events = [] }) => {
     return slots;
   };
 
+  const handleEventClick = (event) => {
+    setSelectedEvent(event);
+    setShowEventModal(true);
+  };
+
+  const handleEventUpdated = () => {
+    setShowEventModal(false);
+    setSelectedEvent(null);
+    if (onEventUpdated) {
+      onEventUpdated();
+    }
+  };
+
   const renderMonthView = () => {
     const daysInMonth = getDaysInMonth(currentDate);
     const firstDay = getFirstDayOfMonth(currentDate);
@@ -160,14 +176,25 @@ const Calendar = ({ events = [] }) => {
               <div
                 key={event.id}
                 className={styles.calendarEvent}
+                onClick={() => handleEventClick(event)}
                 title={`${formatTime(event.time)} - ${event.name}${
                   event.venue ? " at " + event.venue.name : ""
+                }${
+                  event.vendors && event.vendors.length > 0
+                    ? "\nVendors: " +
+                      event.vendors.map((v) => v.name).join(", ")
+                    : ""
                 }${event.notes ? "\nNotes: " + event.notes : ""}`}
               >
                 <div className={styles.eventTime}>{formatTime(event.time)}</div>
                 <div className={styles.eventName}>{event.name}</div>
                 {event.venue && (
                   <div className={styles.eventVenue}>📍 {event.venue.name}</div>
+                )}
+                {event.vendors && event.vendors.length > 0 && (
+                  <div className={styles.eventVendors}>
+                    👥 {event.vendors.map((v) => v.name).join(", ")}
+                  </div>
                 )}
               </div>
             ))}
@@ -229,6 +256,11 @@ const Calendar = ({ events = [] }) => {
                         📍 {event.venue.name}
                       </div>
                     )}
+                    {event.vendors && event.vendors.length > 0 && (
+                      <div className={styles.weekEventVendors}>
+                        👥 {event.vendors.map((v) => v.name).join(", ")}
+                      </div>
+                    )}
                     {event.notes && (
                       <div className={styles.weekEventNotes}>
                         📝 {event.notes}
@@ -277,6 +309,11 @@ const Calendar = ({ events = [] }) => {
                       {event.venue && (
                         <div className={styles.weekEventVenue}>
                           📍 {event.venue.name}
+                        </div>
+                      )}
+                      {event.vendors && event.vendors.length > 0 && (
+                        <div className={styles.weekEventVendors}>
+                          👥 {event.vendors.map((v) => v.name).join(", ")}
                         </div>
                       )}
                       {event.notes && (
@@ -388,6 +425,13 @@ const Calendar = ({ events = [] }) => {
       {viewMode === "month" && renderMonthView()}
       {viewMode === "week" && renderWeekView()}
       {viewMode === "day" && renderDayView()}
+      {showEventModal && selectedEvent && (
+        <EventActionsModal
+          event={selectedEvent}
+          onClose={() => setShowEventModal(false)}
+          onEventUpdated={handleEventUpdated}
+        />
+      )}
     </div>
   );
 };

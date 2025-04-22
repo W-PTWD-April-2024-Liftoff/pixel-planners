@@ -7,7 +7,7 @@ import GuestForm from "./GuestForm";
 import GuestSearch from "./GuestSearch";
 import GuestSearchResults from "./GuestSearchResults";
 import Modal from "../../components/common/Modal/Modal";
-//import Sidebar from "../Dashboard/Sidebar";
+import Sidebar from "../Dashboard/Sidebar";
 
 const GuestPage = () => {
   const [guests, setGuests] = useState([]);
@@ -62,25 +62,29 @@ const GuestPage = () => {
 
     try {
       let response;
+      console.log("Searching for:", searchTerm, "by type:", searchType);
       switch (searchType) {
         case "name":
           response = await guestApi.getGuestByName(searchTerm);
+          console.log("Name search result:", response);
           break;
         case "email":
           response = await guestApi.getGuestByEmail(searchTerm);
+          console.log("Email search result:", response);
           break;
         default:
           response = { data: [] };
       }
 
-      let results = [];
+      let searchResults  = [];
       if (response && response.data) {
-        results = Array.isArray(response.data)
+        searchResults  = Array.isArray(response.data)
           ? response.data
           : [response.data];
       }
 
-      setSearchResults(results.filter((item) => item !== null));
+      console.log("Final search results:", searchResults);
+      setSearchResults(searchResults.filter((item) => item !== null));
     } catch (err) {
       console.error("Error searching guests:", err);
       setSearchResults([]);
@@ -114,8 +118,8 @@ const GuestPage = () => {
     if (window.confirm("Are you sure you want to delete this guest?")) {
       try {
         await guestApi.deleteGuest(guestId);
-        setGuests(guests.filter((g) => g.id !== guestId));
-        setSearchResults(searchResults.filter((g) => g.id !== guestId));
+        setGuests(guests.filter((guest) => guest.id !== guestId));
+        setSearchResults(searchResults.filter((guest) => guest.id !== guestId));
         setError(null);
       } catch (err) {
         console.error("Error deleting guest:", err);
@@ -136,19 +140,21 @@ const GuestPage = () => {
 
     try {
       if (selectedGuest) {
+          //update existing guest
         const response = await guestApi.updateGuest(
           selectedGuest.id,
           guestData
         );
         setGuests(
-          guests.map((g) => (g.id === selectedGuest.id ? response.data : g))
+          guests.map((guest) => (guest.id === selectedGuest.id ? response.data : guest))
         );
         setSearchResults(
-          searchResults.map((g) =>
-            g.id === selectedGuest.id ? response.data : g
+          searchResults.map((guest) =>
+            guest.id === selectedGuest.id ? response.data : guest
           )
         );
       } else {
+          //create new guest
         const response = await guestApi.createGuest(guestData);
         setGuests([...guests, response.data]);
         setSearchResults([...searchResults, response.data]);
@@ -167,7 +173,7 @@ const GuestPage = () => {
   };
 
   if (!isAuthenticated || !token) {
-    return null;
+    return null; // Will redirect in useEffect
   }
 
   if (loading) {

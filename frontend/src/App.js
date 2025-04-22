@@ -10,7 +10,7 @@ import VenuePage from "./pages/Venues/VenuePage";
 import GuestPage from "./pages/Guests/GuestPage";
 import "./App.css";
 import Welcome from "./pages/Welcome/Welcome";
-import Header from "./pages/Welcome/Header";
+//import Header from "./pages/Welcome/Header";
 import OAuth2RedirectHandler from "./pages/User/OAuth2RedirectHandler";
 import UserProfile from "./pages/User/UserProfile";
 

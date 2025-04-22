@@ -63,26 +63,26 @@ export const venueApi = {
 
 export const guestApi = {
   // Get all guests for a specific guest list
-  getAllGuests: (guestListId) => axiosInstance.get(`/api/guests/all/${guestListId}`),
+  getAllGuests: (guestListId) => axiosInstance.get("/api/guests/all/${guestListId}"),
 
   // Get guest by ID within a specific guest list
-  getGuestById: (id, guestListId) => axiosInstance.get(`/api/guests/find/${id}/list/${guestListId}`),
+  getGuestById: (id, guestListId) => axiosInstance.get("/api/guests/find/${id}/list/${guestListId}"),
 
   // Get guest by email within a specific guest list
   getGuestByEmail: (email, guestListId) =>
-    axiosInstance.get(`/api/guests/find/email/${email}/list/${guestListId}`),
+    axiosInstance.get("/api/guests/find/email/${email}/list/${guestListId}"),
 
   // Create a new guest for a guest list
   createGuest: (guestListId, data) =>
-    axiosInstance.post(`/api/guests/add/${guestListId}`, data),
+    axiosInstance.post("/api/guests/add/${guestListId}", data),
 
   // Update guest details
   updateGuest: (id, guestListId, data) =>
-    axiosInstance.put(`/api/guests/update/${id}/list/${guestListId}`, data),
+    axiosInstance.put("/api/guests/update/${id}/list/${guestListId}", data),
 
   // Delete guest
   deleteGuest: (id, guestListId) =>
-    axiosInstance.delete(`/api/guests/delete/${id}/list/${guestListId}`),
+    axiosInstance.delete("/api/guests/delete/${id}/list/${guestListId}"),
 };
 
 
