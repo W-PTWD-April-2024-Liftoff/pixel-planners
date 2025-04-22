@@ -1,6 +1,8 @@
 package com.eventvista.event_vista.data;
 
+import com.eventvista.event_vista.model.Client;
 import com.eventvista.event_vista.model.Guest;
+import com.eventvista.event_vista.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -10,4 +12,12 @@ public interface GuestRepository extends JpaRepository<Guest, Integer> {
     Optional<Guest> findByEmailAddress(String emailAddress);
 
     List<Guest> findByGuestListId(Integer guestListId);
+
+    List<Guest> findAllByUser(User user);
+
+    Optional<Guest> findByIdAndUser(Integer id, User user);
+
+    Optional<Guest> findByNameAndUser(String name, User user);
+
+    Optional<Guest> findByEmailAddressAndUser(String emailAddress, User user);
 }

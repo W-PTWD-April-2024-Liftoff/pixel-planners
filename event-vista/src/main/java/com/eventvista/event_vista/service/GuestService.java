@@ -2,6 +2,7 @@ package com.eventvista.event_vista.service;
 
 import com.eventvista.event_vista.data.GuestRepository;
 import com.eventvista.event_vista.model.Guest;
+import com.eventvista.event_vista.model.User;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,12 @@ public class GuestService {
         this.guestRepository = guestRepository;
     }
 
+    public List<Guest> findAllGuests(User user) {
+        return guestRepository.findAllByUser(user);
+    }
+
+
+    
     public Guest addGuest(Guest guest) {
         return guestRepository.save(guest);
     }

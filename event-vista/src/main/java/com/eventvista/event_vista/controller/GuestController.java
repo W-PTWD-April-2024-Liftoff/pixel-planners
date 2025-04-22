@@ -1,8 +1,9 @@
 package com.eventvista.event_vista.controller;
 
 
-import com.eventvista.event_vista.model.Guest;
+import com.eventvista.event_vista.model.*;
 import com.eventvista.event_vista.service.GuestService;
+import com.eventvista.event_vista.utilities.AuthUtil;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -17,13 +18,17 @@ import java.util.Map;
 @CrossOrigin(origins = "http://localhost:3000")
 public class GuestController {
     private final GuestService guestService;
+    private final AuthUtil authUtil;
 
-    public GuestController(GuestService guestService) {
+    public GuestController(GuestService guestService, AuthUtil authUtil) {
         this.guestService = guestService;
+        this.authUtil = authUtil;
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<Guest>> getAllGuests() {
+        User user = authUtil.getUserFromAuthentication();
+        List<Guest> guests = GuestService.findAllGuest(user);
         return ResponseEntity.ok(guestService.getAllGuests());
     }
 
