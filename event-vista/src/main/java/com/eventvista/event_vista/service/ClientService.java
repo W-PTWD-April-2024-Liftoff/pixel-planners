@@ -1,11 +1,9 @@
 package com.eventvista.event_vista.service;
 
 import com.eventvista.event_vista.data.ClientRepository;
-import com.eventvista.event_vista.data.VenueRepository;
 import com.eventvista.event_vista.model.Client;
 import com.eventvista.event_vista.model.PhoneNumber;
 import com.eventvista.event_vista.model.User;
-import com.eventvista.event_vista.model.Venue;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +11,9 @@ import java.util.Optional;
 
 @Service
 public class ClientService {
+
     private final ClientRepository clientRepository;
+
 
     public ClientService(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
@@ -23,6 +23,7 @@ public class ClientService {
     public List<Client> findAllClients(User user) {
         return clientRepository.findAllByUser(user);
     }
+
 
     public Optional<Client> findClientById(Integer id, User user) {
         return clientRepository.findByIdAndUser(id, user)

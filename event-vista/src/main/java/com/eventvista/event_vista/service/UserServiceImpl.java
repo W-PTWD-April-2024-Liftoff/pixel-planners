@@ -10,7 +10,9 @@ import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
+    // Handles CRUD operations for User entities.
     private final UserRepository userRepository;
+    // assign a default calendar when a new user registers
     private final CalendarService calendarService;
 
     public UserServiceImpl(UserRepository userRepository, CalendarService calendarService) {
@@ -25,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
-        // Save the user first
+        // Save the user in database first
         User savedUser = userRepository.save(user);
 
         // Create and save a calendar for the user if they don't have one
@@ -49,15 +51,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUserProfile(String email, UserProfileDTO dto) {
+        // Check if the user exists
         Optional<User> userOpt = userRepository.findByEmailAddress(email);
+        // If the user is not found, throw an exception or handle it as needed
         if (userOpt.isEmpty()) {
             throw new RuntimeException("User not found");
         }
 
+        // Update the user details
         User user = userOpt.get();
         user.setName(dto.getName());
         user.setEmailAddress(dto.getEmailAddress());
         user.setPictureUrl(dto.getPictureUrl());
+//        // Treat an empty pictureUrl as null.
+//        String pictureUrl = dto.getPictureUrl() != null && dto.getPictureUrl().trim().isEmpty() ? null : dto.getPictureUrl();
+//        user.setPictureUrl(pictureUrl);
 
         return userRepository.save(user);
     }

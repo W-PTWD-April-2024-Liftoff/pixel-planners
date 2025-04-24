@@ -1,79 +1,165 @@
 package com.eventvista.event_vista.service;
 
+
+import com.eventvista.event_vista.data.SkillRepository;
 import com.eventvista.event_vista.data.VendorRepository;
-import com.eventvista.event_vista.exception.VendorNotFoundException;
-import com.eventvista.event_vista.model.PhoneNumber;
-import com.eventvista.event_vista.model.Skill;
-import com.eventvista.event_vista.model.Vendor;
+import com.eventvista.event_vista.model.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class VendorService {
 
     private final VendorRepository vendorRepository;
+    private final SkillRepository skillRepository;
 
     // Constructor
     @Autowired
-    public VendorService(VendorRepository vendorRepository) {
+    public VendorService(VendorRepository vendorRepository, SkillRepository skillRepository) {
         this.vendorRepository = vendorRepository;
+        this.skillRepository= skillRepository;
     }
 
 
     // Query methods
-    public Vendor addVendor(Vendor vendor) {
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public void flushChanges() {
+        entityManager.flush();
+    }
+
+    public Vendor addVendor(Vendor vendor, User user) {
+        // Set the user
+        vendor.setUser(user);
+
+        // Check for duplicate name
+        if (vendorRepository.existsByNameIgnoreCase(vendor.getName())) {
+            throw new IllegalArgumentException("A vendor with the name '" + vendor.getName() + "' already exists.");
+        }
+
+        // Check for duplicate email
+        if (vendorRepository.existsByEmailAddressIgnoreCase(vendor.getEmailAddress())) {
+            throw new IllegalArgumentException("A vendor with the email '" + vendor.getEmailAddress() + "' already exists.");
+        }
+
+        // Check for duplicate phone number
+        if (vendorRepository.existsByPhoneNumber(vendor.getPhoneNumber())) {
+            throw new IllegalArgumentException("A vendor with the phone number '" + vendor.getPhoneNumber() + "' already exists.");
+        }
+
+        // Handle Skill relationship
+        List<Skill> incomingSkills = vendor.getSkills();
+        if (incomingSkills != null && !incomingSkills.isEmpty()) {
+            List<Skill> validSkills = incomingSkills.stream()
+                    .map(Skill::getId)
+                    .filter(Objects::nonNull)
+                    .map(id -> skillRepository.findByIdAndUser(id, user))
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .collect(Collectors.toList());
+
+            vendor.setSkills(validSkills);
+        } else {
+            vendor.setSkills(null);
+        }
+
         return vendorRepository.save(vendor);
     }
 
-    public Vendor findVendorById(Integer id) {
-        return vendorRepository.findVendorById(id).orElseThrow(() -> new VendorNotFoundException("Vendor by id " + id + " was not found."));
+    public Optional<Vendor> findVendorById(Integer id, User user) {
+        return vendorRepository.findByIdAndUser(id, user);
     }
 
-    public Vendor findVendorByName(String name) {
-        return vendorRepository.findVendorByName(name).orElseThrow(() -> new VendorNotFoundException("Vendor by name " + name + " was not found."));
+    public Optional<Vendor> findVendorByName(String name, User user) {
+        return vendorRepository.findByNameAndUser(name, user)
+                .filter(vendor -> vendor.getUser().getId().equals(user.getId()));
     }
 
-    public Vendor findVendorByLocation(String location) {
-        return vendorRepository.findVendorByLocation(location).orElseThrow(() -> new VendorNotFoundException("Vendor by location " + location + " was not found."));
+    public Optional<Vendor> findVendorByLocation(String location, User user) {
+        return vendorRepository.findByLocationAndUser(location, user)
+                .filter(vendor -> vendor.getUser().getId().equals(user.getId()));
+
     }
 
-    public Vendor findVendorBySkills(Set<Skill> skills) {
-        return vendorRepository.findVendorBySkills(skills).orElseThrow(() -> new VendorNotFoundException("Vendor by skill " + skills + " was not found."));
+    public List<Vendor> findVendorBySkillId(Integer skillId, User user) {
+        return vendorRepository.findBySkillsIdAndUser(skillId, user);
     }
 
-    public Vendor findVendorByPhoneNumber(PhoneNumber phoneNumber) {
-        return vendorRepository.findVendorByPhoneNumber(phoneNumber).orElseThrow(() -> new VendorNotFoundException("Vendor by phone number " + phoneNumber + " was not found."));
+    public List<Vendor> findVendorBySkillName(String skillName, User user) {
+        return vendorRepository.findBySkillsNameAndUser(skillName, user);
     }
 
-    public Vendor findVendorByEmailAddress(String emailAddress) {
-        return vendorRepository.findVendorByEmailAddress(emailAddress).orElseThrow(() -> new VendorNotFoundException("Vendor by email address " + emailAddress + " was not found."));
+    public Optional<Vendor> findVendorByPhoneNumber(PhoneNumber phoneNumber, User user) {
+        return vendorRepository.findByPhoneNumberAndUser(phoneNumber, user)
+                .filter(vendor -> vendor.getUser().getId().equals(user.getId()));
     }
 
-    public List<Vendor> findAllVendors() {
-        return vendorRepository.findAll();
+    public Optional<Vendor> findVendorByEmailAddress(String emailAddress, User user) {
+        return vendorRepository.findByEmailAddressAndUser(emailAddress, user)
+                .filter(vendor -> vendor.getUser().getId().equals(user.getId()));
     }
 
-    public Optional<Vendor> updateVendor(Integer id, String name, String location, Set<Skill> skills, PhoneNumber phoneNumber, String emailAddress) {
-
-        // Logic to find the vendor and update only the provided fields
-        Vendor vendor = findVendorById(id); // Retrieve the vendor by ID
-        if (name != null) vendor.setName(name);
-        if (location != null) vendor.setLocation(location);
-        if (skills != null) vendor.setSkills(skills);
-        if (phoneNumber != null) vendor.setPhoneNumber(phoneNumber);
-        if (emailAddress != null) vendor.setEmailAddress(emailAddress);
-
-        // Save the updated vendor
-        return Optional.of(vendorRepository.save(vendor));
+    public List<Vendor> findAllVendors(User user) {
+        return vendorRepository.findAllByUser(user);
     }
 
-    public void deleteVendor(Integer id) {
-        vendorRepository.deleteVendorById(id);
+    public Optional<Vendor> updateVendor(Integer id, Vendor updatedVendor, User user) {
+        return Optional.ofNullable(vendorRepository.findByIdAndUser(id, user)
+                .map(existingVendor -> {
+                    // Update basic fields
+                    existingVendor.setName(updatedVendor.getName());
+                    existingVendor.setLocation(updatedVendor.getLocation());
+                    existingVendor.setPhoneNumber(updatedVendor.getPhoneNumber());
+                    existingVendor.setEmailAddress(updatedVendor.getEmailAddress());
+                    existingVendor.setNotes(updatedVendor.getNotes());
+
+                    // Handle Skill relationship
+                    List<Skill> incomingSkills = updatedVendor.getSkills();
+                    if (incomingSkills != null && !incomingSkills.isEmpty()) {
+                        List<Skill> validSkills = incomingSkills.stream()
+                                .map(Skill::getId)
+                                .filter(Objects::nonNull)
+                                .map(skillId -> skillRepository.findByIdAndUser(skillId, user))
+                                .filter(Optional::isPresent)
+                                .map(Optional::get)
+                                .collect(Collectors.toList());
+
+                        existingVendor.setSkills(validSkills);
+                    } else {
+                        existingVendor.setSkills(null);
+                    }
+
+                    return vendorRepository.save(existingVendor);
+                })
+                .orElseThrow(() -> new RuntimeException("Vendor not found")));
     }
 
+    public boolean deleteVendor(Integer id, User user) {
+        Optional<Vendor> vendor = vendorRepository.findByIdAndUser(id, user);
+        if (vendor.isPresent()) {
+            vendorRepository.delete(vendor.get());
+            return true;
+        }
+        return false;
+    }
 
+    @Transactional
+    public void removeSkillFromVendors(Integer skillId, User user) {
+        List<Vendor> vendors = vendorRepository.findBySkillsIdAndUser(skillId, user);
+
+        for (Vendor vendor : vendors) {
+            vendor.getSkills().removeIf(skill -> skill.getId().equals(skillId));
+            vendorRepository.save(vendor);
+        }
+        entityManager.flush();
+    }
 }

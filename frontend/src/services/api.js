@@ -61,6 +61,7 @@ export const venueApi = {
   deleteVenue: (id) => axiosInstance.delete(`/api/venues/delete/${id}`),
 };
 
+
 export const guestApi = {
   // Get all guests for a specific guest list
   getAllGuests: (guestListId) => axiosInstance.get("/api/guests/all/${guestListId}"),
@@ -100,6 +101,7 @@ export const guestApi = {
 //    getEventsByVendor:
 //};
 
+
 export const eventApi = {
   getAllEvents: () => axiosInstance.get("/api/events/all"),
   getEventById: (id) => axiosInstance.get(`/api/events/find/${id}`),
@@ -118,18 +120,36 @@ export const eventApi = {
     axiosInstance.post(`/api/events/rebook/${id}`, rebookData),
 };
 
-//export const vendorApi = {
-//    getAllVendors:
-//    getVendorById:
-//    getVendorByName:
-//    getVendorByLocation:
-//    getVendorBySkills:
-//    getVendorByPhoneNumber:
-//    getVendorByEmail:
-//    createVendor:
-//    updateVendor:
-//    deleteVendor:
-//};
+export const vendorApi = {
+  getAllVendors: () => axiosInstance.get("/api/vendors/all"),
+  getVendorById: (id) => axiosInstance.get(`/api/vendors/find/${id}`),
+  getVendorByName: (name) => axiosInstance.get(`/api/vendors/find/name/${name}`),
+  getVendorBySkillId: (skillId) =>
+    axiosInstance.get(`/api/vendors/find/skills/id/${skillId}`),
+  getVendorBySkillName: (skillName) =>
+    axiosInstance.get(`/api/vendors/find/skills/name/${encodeURIComponent(skillName)}`),
+  removeSkillFromVendors: (skillId) =>
+      axiosInstance.delete(`/api/vendors/delete/skills/${skillId}`),
+  getVendorByLocation: (location) =>
+    axiosInstance.get(`/api/vendors/find/location/${location}`),
+  getVendorByPhoneNumber: (phoneNumber) =>
+    axiosInstance.get(`/api/vendors/find/phone/${phoneNumber}`),
+  getVendorByEmail: (emailAddress) =>
+    axiosInstance.get(`/api/vendors/find/email/${emailAddress}`),
+  createVendor: (vendorData) => axiosInstance.post("/api/vendors/add", vendorData),
+  updateVendor: (id, vendorData) => axiosInstance.put(`/api/vendors/update/${id}`, vendorData),
+  deleteVendor: (id) => axiosInstance.delete(`/api/vendors/delete/${id}`),
+
+};
+
+export const skillApi = {
+  getAllSkills: () => axiosInstance.get("/api/skills/all"),
+  getSkillById: (id) => axiosInstance.get(`/api/skills/find/${id}`),
+  getSkillByName: (name) => axiosInstance.get(`/api/skills/find/name/${name}`),
+  createSkill: (data) => axiosInstance.post("/api/skills/add", data),
+  updateSkill: (id, data) => axiosInstance.put(`/api/skills/update/${id}`, data),
+  deleteSkill: (id) => axiosInstance.delete(`/api/skills/delete/${id}`),
+};
 
 //export const guestApi = {
 //    getAllGuests:
@@ -138,17 +158,20 @@ export const eventApi = {
 //    deleteGuest:
 //};
 
-//export const clientApi = {
-//    getAllClients:
-//    getClientById:
-//    getClientByName:
-//    getClientByLocation:
-//    getClientByPhoneNumber:
-//    getClientByEmail:
-//    createClient:
-//    updateClient:
-//    deleteClient:
-//};
+export const clientApi = {
+  getAllClients: () => axiosInstance.get("/api/clients/all"),
+  getClientById: (id) => axiosInstance.get(`/api/clients/find/${id}`),
+  getClientByName: (name) => axiosInstance.get(`/api/clients/find/name/${name}`),
+  getClientByLocation: (location) =>
+  axiosInstance.get(`/api/clients/find/location/${location}`),
+  getClientByPhoneNumber: (phoneNumber) =>
+  axiosInstance.get(`/api/clients/find/phone/${phoneNumber}`),
+  getClientByEmail: (emailAddress) =>
+  axiosInstance.get(`/api/clients/find/email/${emailAddress}`),
+  createClient: (data) => axiosInstance.post("/api/clients/add", data),
+  updateClient: (id, data) => axiosInstance.put(`/api/clients/update/${id}`, data),
+  deleteClient: (id) => axiosInstance.delete(`/api/clients/delete/${id}`),
+};
 
 //export const calendarApi = {
 //    getCalendarByUser: (userId) =>
@@ -216,7 +239,9 @@ export const authApi = {
   register: (userData) => axiosInstance.post("/api/auth/register", userData),
   getCurrentUser: () => axiosInstance.get("/api/auth/user"),
   logout: () => axiosInstance.post("/api/auth/logout"),
-  getOAuthUrl: () => "http://localhost:8080/oauth2/authorization/google"
+  getOAuthUrl: () => "http://localhost:8080/oauth2/authorization/google",
+      resetPassword: (data) =>
+          axiosInstance.post("/api/auth/reset-password", data),
 };
 
 export const userApi = {

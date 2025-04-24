@@ -7,6 +7,7 @@ import VenueForm from "./VenueForm";
 import VenueSearch from "./VenueSearch";
 import VenueSearchResults from "./VenueSearchResults";
 import Modal from "../../components/common/Modal/Modal";
+import Sidebar from "../Dashboard/Sidebar";
 
 const VenuePage = () => {
   const [venues, setVenues] = useState([]);
@@ -175,13 +176,21 @@ const VenuePage = () => {
       setSelectedVenue(null);
       setError(null);
     } catch (err) {
-      console.error("Error saving venue:", err);
-      if (err.response?.status === 401 || err.response?.status === 403) {
-        await handleAuthError();
-      } else {
-        setError("Failed to save venue. Please try again.");
+          console.error("Error saving venue:", err);
+
+          if (err.response?.status === 401 || err.response?.status === 403) {
+            await handleAuthError();
+          } else {
+            // Rethrow the error so VenueForm can handle and display it
+            throw err;
+          }
       }
-    }
+  };
+
+  const handleViewAll = () => {
+      setSearchTerm("");
+      setSearchType("name");
+      setSearchResults(venues);
   };
 
   if (!isAuthenticated || !token) {
@@ -197,7 +206,9 @@ const VenuePage = () => {
   }
 
   return (
-    <div className="container" style={{ padding: "2rem" }}>
+                <div style={{ display: "flex", minHeight: "100vh" }}>
+                  <Sidebar />
+    <div className="container" style={{ padding: "2rem", marginLeft: "200px", flex: 1, boxSizing: "border-box" }}>
       <div className="dashboard-header">
         <h2 className="dashboard-title">Venues</h2>
         <p className="dashboard-subtitle">Manage your event venues</p>
@@ -216,6 +227,13 @@ const VenuePage = () => {
           style={{ marginTop: "1rem" }}
         >
           Add New Venue
+        </button>
+         <button
+            className="button button-secondary"
+            onClick={handleViewAll}
+            style={{ marginTop: "1rem", marginLeft: "1rem" }}
+          >
+            View All
         </button>
       </div>
 
@@ -240,6 +258,7 @@ const VenuePage = () => {
           />
         </Modal>
       )}
+    </div>
     </div>
   );
 };

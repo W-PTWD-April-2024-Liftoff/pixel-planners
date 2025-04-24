@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import Calendar from "./Calendar";
 import EventForm from "./EventForm";
+import UpcomingEvents from "../../components/UpcomingEvents/UpcomingEvents";
 import { eventApi } from "../../services/api";
 import "../../styles/components.css";
 import { useNavigate } from "react-router-dom";
+import Sidebar from "./Sidebar";
 
 const Dashboard = () => {
   const { user, logout, token } = useAuth();
@@ -16,8 +18,8 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   const redirectToUserProfile = () => {
-      navigate("/profile"); // Redirect to user profile page
-    };
+    navigate("/profile"); // Redirect to user profile page
+  };
 
   useEffect(() => {
     if (token) {
@@ -59,6 +61,16 @@ const Dashboard = () => {
     setShowEventForm(false);
   };
 
+  const handleEventUpdated = async () => {
+    try {
+      await fetchEvents();
+      setSuccessMessage("Event updated successfully!");
+    } catch (err) {
+      console.error("Error updating events:", err);
+      setError("Failed to update events. Please try again.");
+    }
+  };
+
   if (loading) {
     return (
       <div className="loading-container">
@@ -82,7 +94,17 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="dashboard-container">
+
+    <div className="dashboard-layout" style={{ display: "flex", minHeight: "100vh" }}>
+      {/* Left Sidebar */}
+      <Sidebar />
+        {/* Main Content */}
+    <div className="dashboard-container" style={{
+      marginLeft: "200px", // same as sidebar width
+      padding: "1rem",
+      width: "100%",
+      boxSizing: "border-box"
+      }}>
       <nav className="card">
         <div className="container">
           <div
@@ -97,12 +119,18 @@ const Dashboard = () => {
               <h1 className="card-title">Event Vista</h1>
             </div>
             <div className="flex" style={{ alignItems: "center", gap: "1rem" }}>
+
               <span className="card-content">
                 Welcome, {user?.name || "User"}
               </span>
-                            <button onClick={redirectToUserProfile} className="button button-primary">
-                            Profile
-                              </button>
+              <img
+                src={user.pictureUrl}
+                alt="Profile"
+                className="dashboard-profile-pic"
+              />
+                <button onClick={redirectToUserProfile} className="button button-primary">
+                 Profile
+                 </button>
               <button
                 onClick={handleAddEvent}
                 className="button button-primary"
@@ -128,7 +156,8 @@ const Dashboard = () => {
             {error}
           </div>
         )}
-        <Calendar events={events} />
+        <Calendar events={events} onEventUpdated={handleEventUpdated} />
+        <UpcomingEvents events={events} />
       </div>
 
       {showEventForm && (
@@ -142,8 +171,8 @@ const Dashboard = () => {
         </div>
       )}
     </div>
+    </div>
   );
 };
 
 export default Dashboard;
-

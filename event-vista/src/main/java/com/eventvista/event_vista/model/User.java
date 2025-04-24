@@ -3,7 +3,7 @@ package com.eventvista.event_vista.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
@@ -38,6 +38,7 @@ public class User extends AbstractEntity {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Calendar calendar;
 
+    @Lob
     private String pictureUrl;
 
     // Static method to use the bcrypt dependency for encoding

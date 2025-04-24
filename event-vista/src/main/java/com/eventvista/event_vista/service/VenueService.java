@@ -1,12 +1,8 @@
 package com.eventvista.event_vista.service;
 
-
-import com.eventvista.event_vista.data.UserRepository;
 import com.eventvista.event_vista.data.VenueRepository;
-import com.eventvista.event_vista.exception.VendorNotFoundException;
 import com.eventvista.event_vista.model.PhoneNumber;
 import com.eventvista.event_vista.model.User;
-import com.eventvista.event_vista.model.Vendor;
 import com.eventvista.event_vista.model.Venue;
 import org.springframework.stereotype.Service;
 
@@ -57,6 +53,21 @@ public class VenueService {
 
     public Venue addVenue(Venue venue, User user) {
         venue.setUser(user);
+
+        // Check for duplicate name
+        if (venueRepository.existsByNameIgnoreCase(venue.getName())) {
+            throw new IllegalArgumentException("A venue with the name '" + venue.getName() + "' already exists.");
+        }
+
+        // Check for duplicate email
+        if (venueRepository.existsByEmailAddressIgnoreCase(venue.getEmailAddress())) {
+            throw new IllegalArgumentException("A vendor with the email '" + venue.getEmailAddress() + "' already exists.");
+        }
+
+        // Check for duplicate phone number
+        if (venueRepository.existsByPhoneNumber(venue.getPhoneNumber())) {
+            throw new IllegalArgumentException("A venue with the phone number '" + venue.getPhoneNumber() + "' already exists.");
+        }
         return venueRepository.save(venue);
     }
 

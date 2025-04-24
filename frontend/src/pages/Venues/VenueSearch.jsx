@@ -8,12 +8,21 @@ const VenueSearch = ({
   setSearchType,
   onSearch,
 }) => {
+
+  // Trigger search when the user presses Enter
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      onSearch();
+    }
+  };
+
+
   return (
-    <div className="search-container" style={{ marginBottom: "1rem" }}>
+    <div className="searchContainer" style={{ marginBottom: "1rem" }}>
       <select
         value={searchType}
         onChange={(e) => setSearchType(e.target.value)}
-        className="search-select"
+        className="searchSelect"
       >
 
         <option value="name">Name</option>
@@ -25,8 +34,9 @@ const VenueSearch = ({
         type="text"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
+        onKeyDown={handleKeyPress} // Trigger search on Enter key press
         placeholder={`Search by ${searchType}...`}
-        className="search-input"
+        className="searchInput"
       />
       <button onClick={onSearch} className="button button-primary">
         Search

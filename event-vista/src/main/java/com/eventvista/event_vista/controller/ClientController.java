@@ -27,17 +27,17 @@ public class ClientController {
 
 
     @GetMapping("/all")
-    public ResponseEntity<List<Client>> getAllVenues () {
+    public ResponseEntity<List<Client>> getAllClients () {
         User user = authUtil.getUserFromAuthentication();
         List<Client> clients = clientService.findAllClients(user);
         return ResponseEntity.ok(clients);
     }
 
-
     @GetMapping("/find/{id}")
     public ResponseEntity<Client> getClientById (@PathVariable("id") Integer id) {
         User user = authUtil.getUserFromAuthentication();
         return ResponseEntity.of(clientService.findClientById(id, user));
+
     }
 
     @GetMapping("/find/name/{name}")
@@ -51,7 +51,6 @@ public class ClientController {
         User user = authUtil.getUserFromAuthentication();
         return ResponseEntity.of(clientService.findClientByPhoneNumber(phoneNumber, user));
     }
-
 
     @GetMapping("/find/email/{emailAddress}")
     public ResponseEntity<Client> getClientByEmailAddress (@PathVariable("emailAddress") String emailAddress) {

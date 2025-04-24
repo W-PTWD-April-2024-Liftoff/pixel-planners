@@ -1,19 +1,24 @@
 package com.eventvista.event_vista.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Vendor extends AbstractEntity implements Serializable {
 
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @Column(unique = true)
     @NotBlank(message = "Field must have valid vendor name entered")
     @Size(min = 3, max = 100, message = "Field must be between 3 and 100 characters")
     private String name;
@@ -22,13 +27,20 @@ public class Vendor extends AbstractEntity implements Serializable {
     @Size(min = 3, max = 100, message = "Field must be between 3 and 100 characters")
     private String location;
 
-    @ManyToMany
-    private Set<Skill> skills = new HashSet<>();
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,  CascadeType.REMOVE })
+    @JoinTable(
+            name = "vendor_skills",
+            joinColumns = @JoinColumn(name = "vendor_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id")
+    )
+    private List<Skill> skills = new ArrayList<>();
 
-    @NotBlank(message ="Field must have valid vendor phone number entered")
+    @Column(unique = true)
+    @NotNull(message ="Field must have valid venue phone number entered")
     @Embedded
     private PhoneNumber phoneNumber;
 
+    @Column(unique = true)
     @NotBlank(message ="Field must have valid vendor email entered")
     @Email(message = "Field must have valid email entered")
     private String emailAddress;
@@ -37,13 +49,14 @@ public class Vendor extends AbstractEntity implements Serializable {
     private String notes;
 
     @ManyToMany(mappedBy = "vendors")
+    @JsonIgnore
     private List<Event> events = new ArrayList<>();
 
     // Constructor
     public Vendor() {
     }
 
-    public Vendor(String name, String location, Set<Skill> skills, PhoneNumber phoneNumber, String emailAddress, String notes) {
+    public Vendor(String name, String location, List<Skill> skills, PhoneNumber phoneNumber, String emailAddress, String notes) {
         this.name = name;
         this.location = location;
         this.skills = skills;
@@ -53,6 +66,14 @@ public class Vendor extends AbstractEntity implements Serializable {
     }
 
     // Getters and setters
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public String getName() {
         return name;
@@ -70,11 +91,11 @@ public class Vendor extends AbstractEntity implements Serializable {
         this.location = location;
     }
 
-    public Set<Skill> getSkills() {
+    public List<Skill> getSkills() {
         return skills;
     }
 
-    public void setSkills(Set<Skill> skills) {
+    public void setSkills(List<Skill> skills) {
         this.skills = skills;
     }
 
