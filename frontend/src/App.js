@@ -7,10 +7,14 @@ import VerifyEmail from "./pages/Account/VerifyEmail/VerifyEmail";
 import ResetPassword from "./pages/Account/ResetPassword/ResetPassword";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import VenuePage from "./pages/Venues/VenuePage";
+
+import GuestPage from "./pages/Guests/GuestPage";
 import VendorPage from "./pages/Vendors/VendorPage";
 import ClientPage from "./pages/Clients/ClientPage";
 import "./App.css";
 import Welcome from "./pages/Welcome/Welcome";
+
+//import Header from "./pages/Welcome/Header";
 import OAuth2RedirectHandler from "./pages/User/OAuth2RedirectHandler";
 import UserProfile from "./pages/User/UserProfile";
 
@@ -59,6 +63,8 @@ function App() {
           <Route path="/venues" element={<VenuePage />} />
           <Route path="/vendors" element={<VendorPage />} />
           <Route path="/clients" element={<ClientPage />} />
+          <Route path="/guests" element={<GuestPage />} />
+
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </div>
